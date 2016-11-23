@@ -24,7 +24,7 @@ HashTable.prototype.remove = function(key){
 	}
 }
 
-HashTable.prototype.calculate = function (key){
+HashTable.prototype.calculateHash = function (key){
 	return key.length() % this.size;
 }
 
