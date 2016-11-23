@@ -31,8 +31,19 @@ Graph.prototype.removeVertex = function(vertex){
 }
 
 Graph.prototype.addEdge = function(n1, n2){
-	if (!n1.includes(n2)) n1.push(n2);
-	if (!n2.includes(n1)) n2.push(n1);
+	var incrementCount = false;
+
+	if (!n1.includes(n2)){
+		n1.push(n2);
+		incrementCount = true;
+	}
+
+	if (!n2.includes(n1)){
+		n2.push(n1);
+		incrementCount = true;
+	}
+
+	if (incrementCount) this.numberOfEdges++;
 }
 
 Graph.prototype.removeEdge = function(n1, n2){
