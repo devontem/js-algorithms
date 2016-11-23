@@ -26,7 +26,7 @@ Graph.prototype.removeVertex = function(vertex){
 	});
 
 	if (idx > -1){
-		this.vertices.splice(i, 1);
+		this.vertices.splice(idx, 1);
 	}
 }
 
