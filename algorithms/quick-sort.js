@@ -1,9 +1,10 @@
-function quicksort(array, start, end)
+function quicksort(array, start, end){
 	if (start < end){
 		var pivot = Math.floor((start + end) /2);
 		var newPivot = partition(array, start, end, pivot); // return index of our new pivot, and sorts the array
 		quicksort(array, start, newpivot-1);
 		quicksort(array, newpivot+1, end);
+	}
 }
 
 function swap(array, v1, v2){
@@ -20,7 +21,7 @@ function partition(array, start, end, pivot){
 	for (var i = wall; i < end; i++){
 		if (array[i] < pivotValue){
 			swap(array, wall, i);
-			wall+;
+			wall++;
 		}
 	}
 

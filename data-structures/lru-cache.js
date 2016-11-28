@@ -4,7 +4,7 @@
 /*
  * Implementation #1
  */
-function lru = function(limit){
+function lru(limit){
 
 	this.size = 0;
 	this.limit = limit || 10;
@@ -14,7 +14,7 @@ function lru = function(limit){
 
 }
 
-function lruNode = function(key, value){
+function lruNode(key, value){
 	this.key = key;
 	this.value = value;
 	this.next = null;
@@ -54,20 +54,70 @@ lru.prototype.setHead = function(node){
 		this.tail = node;
 	}
 
-	this.size++;	
+	this.size++;					// increase size
 	this.map[node.key] = node;		// add to map
 }
 
+// O(n) Solution
 lru.prototype.remove = function(key){
 
+	var curr = this.head;
+	var prev = null;
+
+	while (curr){		// iterate through linkedlist
+
+		if (curr.key === key){
+			if (prev) prev.next = curr.next;  // skipping over current node
+			if (!prev) this.head = curr.next; // if no previous, set current to head
+			if (this.tail.key === curr.key) this.tail = prev; // set tail to prev or null
+			delete this.map[key]; // delete from map
+			this.size--; // decrease size
+
+			return; // end function
+		}
+		prev = curr;
+		curr = curr.next;
+	}
+}
+
+// O(1) Solution
+lru.prototype.remove = function(key){
+	var node = this.map[key];
+
+	if (node.prev) node.prev.next = node.next;
+	if (!node.prev) this.head = node.next;
+	if (node.next) node.next.prev = node.prev || null;
+	if (this.tail.key === node.key) this.tail = node.prev || null;
+
+	this.size--;
+	delete this.map[key];
+}
+
+lru.prototype.removeAll = function(limit){
+	this.limit = limit;
+	this.size = 0;
+	this.map = {};
+	this.head = this.tail = null;
 }
 
 lru.prototype.forEach = function(cb){
-
 	var curr = this.head;
 
 	while (curr){
 		cb(curr);  // apply callback on current node
+		curr = curr.next;
+	}
+}
+
+// robust version of each method
+lru.prototype.each = function(cb){
+	var curr = this.head;	
+	var i = 0;				// setting increments
+
+	while (curr){
+		cb.apply(this, [curr, i, this]); // calling cb with node, index, lrucache
+
+		i++;				// increment counter
 		curr = curr.next;
 	}
 }
