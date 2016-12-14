@@ -1,8 +1,9 @@
 //remove, calculate, search,length, print
 
-function HashTable(){
+function HashTable(size){
 	this.storage = {};
 	this.items = 0;
+	this.size = size; // maximum size of hash table
 }
 
 HashTable.prototype.add = function (key, value){

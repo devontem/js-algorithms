@@ -93,3 +93,13 @@ function Node(value){
 	this.val = value;
 	this.next = null;
 }
+
+// For testing purposes (uncomment)
+// var t = new LinkedList();
+// [1,2,3,4,5,6].forEach(function(value){
+// 	t.add(value);
+// });
+// t.print();
+
+
+
