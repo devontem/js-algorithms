@@ -1,61 +1,132 @@
 //graph, add vertez, remove vertex, add edge, remove edge,size, relations, traverseDFS (all) w/ callback,  traverse BFS, pathfromto, print
 
-function Graph = function(){
-	this.vertices = [];
-	this.edges = [];
-	this.numberOfEdges = 0;
-}
+var Graph = function(){
+	this.nodes = [];
+	this.items = 0;
 
-function Vertex = function(val){
-	this.val = val;
-	this.edges = [];
-}
+	this.add = function(value){
+		var node = new Node(value);
 
-Graph.prototype.addVertex = function(vertex){
-	var vertex = new Vertex(val);
+		// adding a new node
+		this.nodes.push(node);
+		this.items++;
+		return node;
+	}
 
-	this.vertices.push(vertex);
-	this.numberOfEdges++;
-}
+	this.remove = function(value){
 
-Graph.prototype.removeVertex = function(vertex){
-	var idx = -1;
-	
-	this.vertices.forEach(function(v, i){
-		if (v === vertex) idx = 1;
-	});
+		this.nodes = this.nodes.filter(function(v){
+			return v === value;
+		});
+	}
 
-	if (idx > -1){
-		this.vertices.splice(idx, 1);
+	this.addEdge = function(node1, node2){
+		if (!node1.edges[node2]) node1.edges[node2] = node2;
+		if (!node2.edges[node1]) node2.edges[node1] = node1;
+	}
+
+	this.removeEdge = function(node1, node2){
+		if (!node1.edges[node2]) delete node1.edges[node2];
+		if (!node2.edges[node1]) delete node2.edges[node1];
+	}
+
+	this.BFS = function(beginNode, value){
+
+		beginNode = beginNode || this.nodes[0];
+		var q = [];
+		q.push(beginNode);
+
+		while (q.length){
+			var curr = q.shift();
+
+			// if there is a match, return the node
+			if (curr.val === value) return curr;
+
+			// mark the current node as visited
+			curr.visited = true;
+
+			// only add nodes that aren't visit to the queue
+			curr.edges.forEach(function(v){
+				if (!v.visited) q.push(v);
+			});
+		}
+		return -1;
+	}
+
+	this.DFS = function(beginNode, value){
+
+		beginNode = beginNode || this.nodes[0];
+		var s = [];
+		s.push(beginNode);
+
+		while (s.length){
+
+			var curr = s.pop();
+
+			// if there is a match, return the node
+			if (curr.val === value) return curr;
+
+			// mark the current node as visited
+			curr.visited = true;
+
+			// only add nodes that aren't visit to the stack
+			curr.edges.forEach(function(v){
+				if (!v.visited) s.push(v);
+			})
+		}
+		return -1;
+	}
+
+	this.traverseBFS = function(beginNode, cb){
+		beginNode = beginNode || this.nodes[0];
+		var q = [];
+		q.push(beginNode);
+
+		while (q.length){
+			var curr = q.shift();
+
+			// callback
+			cb(curr);
+
+			// mark the current node as visited
+			curr.visited = true;
+
+			// only add nodes that aren't visit to the queue
+			curr.edges.forEach(function(v){
+				if (!v.visited) q.push(v);
+			});
+		}
+		return -1;
+	}
+
+	this.traverseDFS = function(beginNode, cb){
+		beginNode = beginNode || this.nodes[0];
+		var s = [];
+		s.push(beginNode);
+
+		while (s.length){
+
+			var curr = s.pop();
+
+			// callback
+			cb(curr);
+
+			// mark the current node as visited
+			curr.visited = true;
+
+			// only add nodes that aren't visit to the stack
+			curr.edges.forEach(function(v){
+				if (!v.visited) s.push(v);
+			})
+		}
+		return -1;
 	}
 }
 
-Graph.prototype.addEdge = function(n1, n2){
-	var incrementCount = false;
-
-	if (!n1.includes(n2)){
-		n1.push(n2);
-		incrementCount = true;
-	}
-
-	if (!n2.includes(n1)){
-		n2.push(n1);
-		incrementCount = true;
-	}
-
-	if (incrementCount) this.numberOfEdges++;
+var Node = function(value){
+	this.val = value;
+	this.edges = {};
 }
-
-Graph.prototype.removeEdge = function(n1, n2){
-	var idx1 = n1.indexOf(n2);
-	var idx2 = n2.indexOf(n1);
-
-	if (idx1 > -1) n1.splice(idx1, 1);
-	if (idx2 > -1) n2.splice(idx2, 1);
-
-	this.numberOfEdges--;
-}
-
 
 
 
