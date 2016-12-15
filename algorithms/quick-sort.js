@@ -25,10 +25,62 @@ function partition(array, start, end, pivot){
 		}
 	}
 
-	// puts the pivot in the right order
 	swap(array, wall, end);
 	return wall;
 }
+
+// Heavily commented version of the code
+
+
+function quickSort(array, start, end){
+	if (start < end){
+
+		// select an arbitrary pivot, the middle, for example
+		var pivot = Math.floor((start + end) / 2);
+		var newPivot = partition(array, start, end, pivot);
+
+		// quicksort all the elements to the left of the pivot (remainder of array)
+		quickSort(array, start, newPivot)
+
+		// quicksort all the elements to the right of the pivot (remainder of array)
+		quickSort(array, newPivot + 1, end);
+	}
+}
+
+function swap(array, a, b){
+	var temp = array[a];
+	array[a] = array[b];
+	array[b] = temp;
+}
+
+function partition(array, start, end, pivot){
+
+	//capture pivot value
+	var pivotValue = array[pivot];
+	
+	// set wall as the starting point
+	var wall = start;
+
+	//swap pivot with end, for iteration purposes
+	swap(array, pivot, end);
+
+	//begin iterating through the array, and replacing values
+	for (var i = start; i < end; i++){
+
+		// if value is less than the pivot value, increment the wall and swap the values (so lesser values are left of wall)
+		if (array[i] < pivotValue){
+			swap(array, i, wall);
+			wall++;
+		}
+	}
+
+	// after all values less than wall are to the right, replace original pivot with the wall
+	swap(array, end, wall);
+
+	// return the "wall" as it will become the ne wpivot
+	return wall;
+}
+
 
 // [4,2,6,8,1,3]
 // [4,2,3,8,1,6]
